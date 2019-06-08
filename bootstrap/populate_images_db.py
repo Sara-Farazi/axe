@@ -7,24 +7,28 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 DB_FILE_NAME = "db.sqlite3"
+
+
+def create_connection():
+    conn = sqlite3.connect(DB_FILE_NAME)
+    return conn
+
+
 DATA_DIR = "data"
 DATA_FILE_NAME = "results.csv"
 IMAGES_DIR = "images"
 stop_words = set(stopwords.words("english"))
+IMAGES_TABLE_NAME = "IMAGE"
 
 
-def create_connection(db_file):
-    conn = sqlite3.connect(db_file)
-    return conn
+def create_table(cursor, table_name):
 
-
-def create_table(cursor):
-    command = "CREATE TABLE IF NOT EXISTS IMAGE (" \
+    command = "CREATE TABLE IF NOT EXISTS {} (" \
               "ID INT PRIMARY KEY NOT NULL," \
               "TOKENS TEXT NOT NULL," \
               "SIZE INT NOT NULL," \
               "HEIGHT INT NOT NULL," \
-              "WIDTH INT NOT NULL);"
+              "WIDTH INT NOT NULL);".format(table_name)
 
     cursor.execute(command)
 
@@ -55,11 +59,12 @@ def add_to_database(cursor, image_id, comments):
 
     comments_string = " ".join(tokens)
 
-    command = "INSERT INTO IMAGE VALUES ({}, \"{}\", {}, {}, {});".format(id,
-                                                                          comments_string,
-                                                                          file_size,
-                                                                          image_height,
-                                                                          image_width)
+    command = "INSERT INTO {} VALUES ({}, \"{}\", {}, {}, {});".format(IMAGES_TABLE_NAME,
+                                                                       id,
+                                                                       comments_string,
+                                                                       file_size,
+                                                                       image_height,
+                                                                       image_width)
 
     cursor.execute(command)
 
@@ -71,25 +76,30 @@ def populate_db(cursor):
         current_batch = []
         current_id = None
         for line in csv_reader:
-            image_id = line[0].strip()
-            comment = line[2].strip()
+            try:
 
-            # if image_id != current_id previous batch has been completed
-            if image_id != current_id:
-                # if it's the first batch of the entire data
-                if current_id:
-                    add_to_database(cursor, current_id, current_batch)
+                image_id = line[0].strip()
+                comment = line[2].strip()
 
-                current_id = image_id
-                current_batch = []
+                # if image_id != current_id previous batch has been completed
+                if image_id != current_id:
+                    # if it's the first batch of the entire data
+                    if current_id:
+                        add_to_database(cursor, current_id, current_batch)
 
-            current_batch.append(comment.lower())
+                    current_id = image_id
+                    current_batch = []
+
+                current_batch.append(comment.lower())
+
+            except Exception as e:
+                print("Error processing line\n{}\n{}\n".format(line, str(e)))
 
 
 def main():
-    conn = create_connection(DB_FILE_NAME)
+    conn = create_connection()
     cursor = conn.cursor()
-    create_table(cursor)
+    create_table(cursor, IMAGES_TABLE_NAME)
     populate_db(cursor)
     conn.commit()
     conn.close()

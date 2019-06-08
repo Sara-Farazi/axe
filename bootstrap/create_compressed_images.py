@@ -30,13 +30,9 @@ def main():
     if not os.path.isdir(DEST_DIR):
         os.mkdir(DEST_DIR)
 
-    counter = 0
     for file in os.listdir(SOURCE_DIR):
-        if counter > 100:
-            return
         if os.path.splitext(file)[1].lower() == ".jpg":
             compress(file)
-            counter += 1
 
 
 if __name__ == "__main__":
