@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from axe.views import index, search_results
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('results', search_results),
+    path('', index)
 ]

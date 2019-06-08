@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h0!tt0jranh2m4ovq%s7ci1q8y*fc^rlz2gp6n-a$bi_x8mqe%'
+SECRET_KEY = '@i!*!f#5sj@jz&kl2*2i4+otqo-y6#6agqw09d34(!(d^_du@o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,11 +74,12 @@ WSGI_APPLICATION = 'shopify.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+DB_FILE_NAME = 'db.sqlite3'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, DB_FILE_NAME),
     }
 }
 

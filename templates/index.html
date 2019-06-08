@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shopify Internship Project</title>
+	<style type="text/css">
+		.grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: 1fr 5fr;
+			grid-gap: 20px;
+			height: 80vh;
+			width: 80vw;
+			padding: 20px;
+			margin: 0 auto;
+		}
+
+		.normal-search {
+			display: grid;
+			grid-template-columns: 5fr 1fr;
+			grid-template-rows: 1fr;
+			align-items: center;
+			grid-gap: 2%;
+		}
+		div.icon.input, button.button {
+			height: 80%;
+		}
+		.advanced-search {
+			background: blue;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/input.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
+</head>
+<body>
+	<div class="grid">
+		<div class="normal-search">
+			<div class="ui fluid icon input">
+				<input type="text" placeholder="Search a very wide input...">
+			</div>
+			<button class="ui blue button">Search</button>
+		</div>
+		<div class="advanced-search">
+		</div>
+	</div>
+</body>
+</html>
