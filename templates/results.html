@@ -1,57 +1,105 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shopify Internship Project</title>
-	<style type="text/css">
-		.grid {
-			display: grid;
-			grid-template-columns: 3fr 3fr 3fr;
-			grid-template-rows: 3fr 3fr 3fr;
-			grid-gap: 20px;
-			height: 80vh;
-			width: 80vw;
-			padding: 20px;
-			margin: 0 auto;
-		}
-		.search-result {
-			display: grid;
-			grid-template-rows: 4fr 1fr;
-			grid-template-columns: 1fr;
-			grid-row-gap: 10px;
-		}
-		.image-actions {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			align-items: center;
-			justify-items: center;
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/checkbox.min.css">
+    <title>Shopify Internship Project</title>
+    <style type="text/css">
+        body {
+            display: grid;
+            grid-template-rows: 50px 1fr 50px;
+            grid-row-gap: 50px;
+            width: 80vw;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            grid-row-gap: 4%;
+            grid-column-gap: 1%;
+        }
+
+        .search-result {
+            display: grid;
+            grid-template-rows: 3fr 1fr;
+            grid-row-gap: 3%;
+            border: 2px black dashed;
+            height: 25vh;
+        }
+
+        .image-actions {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .image {
+            justify-self: center;
+            align-self: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .pagination-container {
+            display: grid;
+            align-items: center;
+            justify-items: center;
+            margin-top: 100px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/checkbox.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/menu.min.css">
 </head>
 <body>
-	<div class="grid">
-		<div class="search-result">
-			<div class="image">
-				
-			</div>
-			<div class="image-actions">
-				<i class="large expand icon"></i>
-				<div class="ui checkbox">
-					<input type="checkbox" name="example">
-					<label>Select for download</label>
-				</div>
-			</div>
-		</div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-		<div class="search-result"></div>
-	</div>
+<div>
+    <a href="/">
+        <i class="huge brown home icon"></i>
+    </a>
+</div>
+<div class="grid">
+    {% for result in results %}
+        <div class="search-result">
+            {% with 'compressed/'|add:result|add:'.jpg' as image_static %}
+                <img src="{% static image_static %}" class="image">
+            {% endwith %}
+            <div class="image-actions">
+                <a href="http://google.com" title="Fullscreen">
+                    <i class="large expand icon"></i>
+                </a>
+                <div class="ui checkbox">
+                    <input type="checkbox" name="example">
+                    <label>Select for download</label>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination-container">
+    <div class="ui pagination menu">
+        <a class="active item">
+            1
+        </a>
+        <div class="disabled item">
+            ...
+        </div>
+        <a class="item">
+            10
+        </a>
+        <a class="item">
+            11
+        </a>
+        <a class="item">
+            12
+        </a>
+    </div>
+</div>
 </body>
 </html>
