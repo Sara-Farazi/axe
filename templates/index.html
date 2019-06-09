@@ -1,46 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shopify Internship Project</title>
-	<style type="text/css">
-		.grid {
-			display: grid;
-			grid-template-columns: 1fr;
-			grid-template-rows: 1fr 5fr;
-			grid-gap: 20px;
-			height: 80vh;
-			width: 80vw;
-			padding: 20px;
-			margin: 0 auto;
-		}
+    <title>Shopify Internship Project</title>
+    <style type="text/css">
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 3fr 1fr 1fr 4fr;
+            grid-gap: 20px;
+            height: 80vh;
+            width: 80vw;
+            padding: 20px;
+            margin: 0 auto;
+        }
 
-		.normal-search {
-			display: grid;
-			grid-template-columns: 5fr 1fr;
-			grid-template-rows: 1fr;
-			align-items: center;
-			grid-gap: 2%;
-		}
-		div.icon.input, button.button {
-			height: 80%;
-		}
-		.advanced-search {
-			background: blue;
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/input.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
+        .normal-search {
+            display: grid;
+            grid-template-columns: 5fr 1fr;
+            align-items: center;
+            grid-gap: 2%;
+        }
+
+        div.icon.input, button.button {
+            height: 100%;
+        }
+
+        .advanced-search {
+            display: grid;
+            grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
+            grid-template-columns: 1fr 1fr;
+            height: 50%;
+        }
+
+        .keywords {
+            grid-column: span 2;
+            height: 50%;
+            align-self: center;
+        }
+
+        .size-input {
+            width: 50%;
+            height: 50%;
+            align-self: center;
+        }
+
+        h3.ui.header.head {
+            grid-column: span 2;
+            align-self: end;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/input.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/input.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/label.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/header.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/divider.min.css">
+
 </head>
 <body>
-	<div class="grid">
-		<div class="normal-search">
-			<div class="ui fluid icon input">
-				<input type="text" placeholder="Search a very wide input...">
-			</div>
-			<button class="ui blue button">Search</button>
-		</div>
-		<div class="advanced-search">
-		</div>
-	</div>
+<div class="grid">
+
+    <h2 class="ui header">Search by Text</h2>
+
+
+    <form class="normal-search" method="post">
+        {% csrf_token %}
+        {% if alerts %}
+            <div class="ui error message" style="height: 10%">
+
+                <p style="float: left;">Invalid Input!</p>
+
+            </div>
+        {% endif %}
+
+        <div class="ui fluid icon input">
+            <input type="text" placeholder="Search a very wide input..." name="text">
+        </div>
+        <button class="ui blue button" type="submit" name="text_search">Search</button>
+    </form>
+
+
+    <div class="ui section divider"></div>
+
+
+    <h2 class="ui header">Advanced Search</h2>
+
+
+    <form class="advanced-search" method="post">
+        {% csrf_token %}
+        {% if alerts %}
+            <div class="ui error message" style="height: 10%">
+                <p style="float: left;">Invalid Input!</p>
+            </div>
+        {% endif %}
+        <h3 class="ui header head">Keywords:</h3>
+
+        <div class="ui input keywords">
+            <input type="text" placeholder="Enter keywords comma separated..." name="keywords">
+        </div>
+
+        <h3 class="ui header head">Image Size:</h3>
+
+        <div class="ui right labeled input size-input">
+            <input type="text" placeholder="Minimum Size.." name="min_size">
+            <div class="ui basic label">
+                KBs
+            </div>
+        </div>
+
+        <div class="ui right labeled input size-input">
+            <input type="text" placeholder="Maximum Size.." name="max_size">
+            <div class="ui basic label">
+                KBs
+            </div>
+        </div>
+
+        <div>
+            <button class="ui blue button" type="submit" name="advanced_search">Advanced Search</button>
+        </div>
+    </form>
+
+</div>
 </body>
 </html>
