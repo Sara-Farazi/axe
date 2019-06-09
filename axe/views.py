@@ -1,11 +1,11 @@
-import re
+import math
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from axe.data_provider import get_keyword_results
-
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+
+from axe.data_provider import get_keyword_results
 
 stop_words = set(stopwords.words("english"))
 
@@ -19,6 +19,24 @@ def get_keywords(query):
             tokens.append(token)
 
     return tokens
+
+
+def get_pagination_items(results_size, page):
+    pages = math.ceil(results_size / PAGE_SIZE)
+    next_page = page + 1
+    prev_page = page - 1
+
+    if page == 1:
+        prev_page = "disabled"
+
+    if page == pages:
+        next_page = "disabled"
+
+    return {
+        "page": page,
+        "prev": prev_page,
+        "next": next_page
+    }
 
 
 def is_search_request(request):
@@ -40,7 +58,7 @@ def validate_advanced_search(query, max_size, min_size):
 
 def get_results_page(results, page):
     page_index = page - 1
-    return results[page_index*PAGE_SIZE:page_index*PAGE_SIZE+PAGE_SIZE]
+    return results[page_index * PAGE_SIZE:page_index * PAGE_SIZE + PAGE_SIZE]
 
 
 def index(request):
@@ -67,7 +85,8 @@ def index(request):
             page = 1
 
         return render(request, 'results.html', {
-            "results": get_results_page(results, page)
+            "results": get_results_page(results, page),
+            "pages": get_pagination_items(len(results), page)
         })
 
     else:

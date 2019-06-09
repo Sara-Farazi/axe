@@ -59,6 +59,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/menu.min.css">
 </head>
 <body>
+
 <div>
     <a href="/">
         <i class="huge brown home icon"></i>
@@ -84,22 +85,41 @@
 </div>
 <div class="pagination-container">
     <div class="ui pagination menu">
-        <a class="active item">
-            1
-        </a>
-        <div class="disabled item">
-            ...
+        {% if pages.prev == "disabled" %}
+            <a class="disabled item">
+                <i class="left arrow icon"></i>
+            </a>
+        {% else %}
+            <a class="item" page="{{ pages.prev }}">
+                <i class="left arrow icon"></i>
+            </a>
+        {% endif %}
+        <div class="item">
+            Page #{{ pages.page }}
         </div>
-        <a class="item">
-            10
-        </a>
-        <a class="item">
-            11
-        </a>
-        <a class="item">
-            12
-        </a>
+        {% if pages.next == "disabled" %}
+            <a class="disabled item">
+                <i class="right arrow icon"></i>
+            </a>
+        {% else %}
+            <a class="item" page="{{ pages.next }}">
+                <i class="right arrow icon"></i>
+            </a>
+        {% endif %}
     </div>
 </div>
+
+
+<script type="text/javascript" >
+    const elements = document.querySelectorAll("a.item:not(.disabled)");
+    for (const element of elements) {
+        element.addEventListener("click", function() {
+            const pageNum = this.getAttribute("page");
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set("page", pageNum);
+            window.location.href = `/?${urlParams.toString()}`;
+        });
+    }
+</script>
 </body>
 </html>
