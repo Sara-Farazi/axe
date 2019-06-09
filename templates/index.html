@@ -17,8 +17,10 @@
         .normal-search {
             display: grid;
             grid-template-columns: 5fr 1fr;
+            grid-template-rows: 1fr 1fr;
             align-items: center;
-            grid-gap: 2%;
+            grid-row-gap: 20px;
+            grid-column-gap: 2%;
         }
 
         div.icon.input, button.button {
@@ -27,7 +29,7 @@
 
         .advanced-search {
             display: grid;
-            grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
+            grid-template-rows: 1fr 1fr 3fr 1fr 3fr 1fr;
             grid-template-columns: 1fr 1fr;
             height: 50%;
         }
@@ -61,6 +63,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/header.min.css">
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/divider.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/message.min.css">
 
 </head>
 <body>
@@ -71,15 +75,15 @@
 
     <form class="normal-search" method="post">
         {% csrf_token %}
-        {% if alerts %}
-            <div class="ui error message" style="height: 10%">
+        <div style="grid-column: span 6;">
+            {% if text_search_error %}
+                <div class="ui error message">
+                    Invalid Input!
+                </div>
+            {% endif %}
+        </div>
 
-                <p style="float: left;">Invalid Input!</p>
-
-            </div>
-        {% endif %}
-
-        <div class="ui fluid icon input">
+        <div class="ui fluid icon input" style="grid-color:span 5;">
             <input type="text" placeholder="Search a very wide input..." name="text">
         </div>
         <button class="ui blue button" type="submit" name="text_search">Search</button>
@@ -94,11 +98,13 @@
 
     <form class="advanced-search" method="post">
         {% csrf_token %}
-        {% if alerts %}
-            <div class="ui error message" style="height: 10%">
-                <p style="float: left;">Invalid Input!</p>
-            </div>
-        {% endif %}
+        <div>
+            {% if advanced_search_error %}
+                <div class="ui error message">
+                    Invalid input!
+                </div>
+            {% endif %}
+        </div>
         <h3 class="ui header head">Keywords:</h3>
 
         <div class="ui input keywords">

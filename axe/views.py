@@ -8,7 +8,7 @@ def index(request):
             text = request.POST['text']
             if text == "":
                 return render(request, 'index.html', {
-                    'alerts': True
+                    'text_search_error': True
                 })
             return render(request, 'results.html')
         elif 'advanced_search' in request.POST:
@@ -17,7 +17,7 @@ def index(request):
             max_size = request.POST['max_size']
             if keywords == "" and min_size == "" and max_size == "":
                 return render(request, 'index.html', {
-                    'alerts': True
+                    'advanced_search_error': True
                 })             
             return render(request, 'results.html')
         else:
