@@ -1,4 +1,5 @@
 import os
+import time
 import uuid
 import math
 import zipfile
@@ -9,6 +10,29 @@ from django.shortcuts import render
 from axe.data_provider import get_query_results
 
 PAGE_SIZE = 16
+
+
+QUERY_PROCESSING_TIME_HISTORY = []
+
+
+def record_query_processing_time(func):
+    def wrapper(*args, **kwargs):
+        request = list(args)[0]
+        start_time = time.time()
+        response = func(*args, **kwargs)
+        processing_time = time.time() - start_time
+
+        if is_search_request(request):
+            QUERY_PROCESSING_TIME_HISTORY.append({
+                "query": request.GET['query'],
+                "min_size": request.GET['min_size'],
+                "max_size": request.GET['max_size'],
+                "processing_time": processing_time,
+                "timestamp": start_time
+            })
+        return response
+
+    return wrapper
 
 
 def compress_images(images):
@@ -65,6 +89,7 @@ def get_results_page(results, page):
     return results[page_index * PAGE_SIZE:page_index * PAGE_SIZE + PAGE_SIZE]
 
 
+@record_query_processing_time
 def index(request):
     if request.method == 'GET':
 
@@ -108,3 +133,9 @@ def download(request):
 
     except Exception as e:
         return None
+
+
+def get_query_history(request):
+    return render(request, 'queries.html', {
+        "queries": QUERY_PROCESSING_TIME_HISTORY
+    })

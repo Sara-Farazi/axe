@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query processing times</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/table.min.css">
+</head>
+<body>
+<h1>Query processing times history</h1>
+<br>
+{% if queries %}
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Text</th>
+            <th>Min - Max File Size</th>
+            <th>Processing time (seconds)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for query in queries %}
+            <tr>
+                <td>{{ query.timestamp }}</td>
+                <td>{{ query.query }}</td>
+                <td>
+                    {% if query.min_size %}
+                        {{ query.min_size }} KBs
+                    {% else %}
+                        NA
+                    {% endif %}
+                    -
+                    {% if query.min_size %}
+                        {{ query.max_size }} KBs
+                    {% else %}
+                        NA
+                    {% endif %}
+                </td>
+                <td>{{ query.processing_time }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h1>Sorry, there are no recorded queries!</h1>
+{% endif %}
+</body>
+</html>
