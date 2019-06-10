@@ -1,24 +1,11 @@
 import math
+import sqlite3
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-
-from axe.data_provider import get_keyword_results
-
-stop_words = set(stopwords.words("english"))
+from axe.data_provider import get_query_results
 
 PAGE_SIZE = 16
-
-
-def get_keywords(query):
-    tokens = []
-    for token in word_tokenize(query):
-        if token not in stop_words and token.isalnum():
-            tokens.append(token)
-
-    return tokens
 
 
 def get_pagination_items(results_size, page):
@@ -43,7 +30,7 @@ def is_search_request(request):
     return not request.GET == {}
 
 
-def validate_advanced_search(query, max_size, min_size):
+def validate_search(query, max_size, min_size):
     if query == "" and min_size == "" and max_size == "":
         return False
 
@@ -71,13 +58,12 @@ def index(request):
         min_size = request.GET['min_size']
         max_size = request.GET['max_size']
 
-        if not validate_advanced_search(query, max_size, min_size):
+        if not validate_search(query, max_size, min_size):
             return render(request, 'index.html', {
                 'advanced_search_error': True
             })
 
-        keywords = get_keywords(query)
-        results = [result.decode("utf-8") for result in get_keyword_results(keywords)]
+        results = [result.decode("utf-8") for result in get_query_results(query, min_size, max_size)]
 
         try:
             page = int(request.GET['page'])

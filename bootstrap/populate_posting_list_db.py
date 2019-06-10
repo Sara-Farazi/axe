@@ -15,8 +15,8 @@ def create_connection():
 def create_table(cursor, table_name):
 
     command = "CREATE TABLE IF NOT EXISTS {} (" \
-              "TOKENS TEXT NOT NULL," \
-              "IMAGE INT NOT NULL)".format(table_name)
+              "IMAGE INT NOT NULL," \
+              "TOKEN TEXT NOT NULL)".format(table_name)
 
     cursor.execute(command)
 
