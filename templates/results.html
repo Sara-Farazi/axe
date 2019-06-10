@@ -48,6 +48,13 @@
             justify-items: center;
             margin-top: 100px;
         }
+
+        .icons-grid {
+            display: grid;
+            grid-template-columns: 50px 50px;
+            justify-content: space-between;
+            cursor: pointer;
+        }
     </style>
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
@@ -57,26 +64,38 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/checkbox.min.css">
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/menu.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/modal.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dimmer.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/transition.min.css">
 </head>
 <body>
 
-<div>
-    <a href="/">
+<div class="icons-grid">
+    <a href="/" title="Home">
         <i class="huge brown home icon"></i>
+    </a>
+    <a title="Download selected" id="download">
+        <i class="huge brown download icon"></i>
     </a>
 </div>
 <div class="grid">
     {% for result in results %}
         <div class="search-result">
-            {% with 'compressed/'|add:result|add:'.jpg' as image_static %}
+            {% with '/compressed/'|add:result|add:'.jpg' as image_static %}
                 <img src="{% static image_static %}" class="image">
             {% endwith %}
             <div class="image-actions">
-                <a href="http://google.com" title="Fullscreen">
+                <a class="fullscreen" title="Fullscreen" image="
+                {% with '/images/'|add:result|add:'.jpg' as image_static %}
+                    {% static image_static %}
+                {% endwith %}">
                     <i class="large expand icon"></i>
                 </a>
                 <div class="ui checkbox">
-                    <input type="checkbox" name="example">
+                    <input type="checkbox" name="example" image="{{ result }}">
                     <label>Select for download</label>
                 </div>
             </div>
@@ -109,17 +128,79 @@
     </div>
 </div>
 
+<div class="ui modal" id="modal">
+    <div class="image content" style="display: grid; align-items: center; justify-items: center;">
+        <img id="fullscreen-image" class="image" style="zoom: 2;">
+    </div>
+</div>
 
-<script type="text/javascript" >
-    const elements = document.querySelectorAll("a.item:not(.disabled)");
-    for (const element of elements) {
-        element.addEventListener("click", function() {
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dimmer.min.js"></script>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/modal.min.js"></script>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/transition.min.js"></script>
+
+<script type="text/javascript">
+    const paginationElements = document.querySelectorAll("a.item:not(.disabled)");
+    for (const element of paginationElements) {
+        element.addEventListener("click", function () {
             const pageNum = this.getAttribute("page");
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set("page", pageNum);
             window.location.href = `/?${urlParams.toString()}`;
         });
     }
+
+    $("#modal").modal();
+
+    const fullscreenElements = document.querySelectorAll("a.fullscreen");
+    for (const element of fullscreenElements) {
+        element.addEventListener("click", function () {
+            const imageUrl = this.getAttribute("image").trim();
+            const modalImage = document.getElementById("fullscreen-image");
+            modalImage.setAttribute("src", imageUrl);
+            $("#modal").modal("show");
+        });
+    }
+
+    const downloadIcon = document.getElementById("download");
+    downloadIcon.addEventListener("click", function () {
+        const imagesToDownload = [];
+        const checkBoxes = document.querySelectorAll(".ui.checkbox input");
+        for (const checkBox of checkBoxes) {
+            if (checkBox.checked) {
+                imagesToDownload.push(checkBox.getAttribute("image"));
+            }
+        }
+        if (imagesToDownload.length === 0) {
+            return
+        }
+        $.ajax({
+            url: `/download?images=${imagesToDownload}`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data) {
+                const a = document.createElement('a');
+                const url = window.URL.createObjectURL(data);
+                debugger;
+                a.href = url;
+                a.download = 'archive.zip';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        });
+    });
+
 </script>
 </body>
 </html>
