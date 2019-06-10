@@ -1,4 +1,7 @@
+import os
+import uuid
 import math
+import zipfile
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -10,6 +13,20 @@ from axe.data_provider import get_keyword_results
 stop_words = set(stopwords.words("english"))
 
 PAGE_SIZE = 16
+
+
+def compress_images(images):
+    image_files = [{
+        "filepath": os.getcwd() + '/data/images/{}.jpg'.format(image),
+        "filename": "{}.jpg".format(image)
+    } for image in images]
+    path = os.getcwd() + "/data/downloads/"
+    compressed_file_path = path + "{}.zip".format(uuid.uuid4().__str__())
+    with zipfile.ZipFile(compressed_file_path, 'w') as image_archive:
+        for f in image_files:
+            image_archive.write(f["filepath"], f["filename"])
+
+    return compressed_file_path
 
 
 def get_keywords(query):
@@ -93,6 +110,15 @@ def index(request):
         return HttpResponse("Invalid request")
 
 
-def search_results(request):
-    if request.method == 'GET':
-        return render(request, 'results.html')
+def download(request):
+    try:
+        images = request.GET['images'].split(",")
+        compressed_file_path = compress_images(images)
+
+        with open(compressed_file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/zip")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(compressed_file_path)
+            return response
+
+    except Exception as e:
+        return None

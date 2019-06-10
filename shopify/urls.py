@@ -16,12 +16,12 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from axe.views import index, search_results
+from axe.views import index, download
 from shopify import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('results', search_results),
+    path('download', download),
     path('', index)
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
