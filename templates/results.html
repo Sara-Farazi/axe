@@ -180,6 +180,9 @@
                 imagesToDownload.push(checkBox.getAttribute("image"));
             }
         }
+        if (imagesToDownload.length === 0) {
+            return
+        }
         $.ajax({
             url: `/download?images=${imagesToDownload}`,
             method: 'GET',
