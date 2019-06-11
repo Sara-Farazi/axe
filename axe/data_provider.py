@@ -50,21 +50,17 @@ def filter_by_size(min_size, max_size, keyword_results):
     conn = sqlite3.connect('db.sqlite3')
     cursor = conn.cursor()
     results = []
-    min_size = int(min_size) * 1000
-    max_size = int(max_size) * 1000
-
+    min_size_num = 0
+    max_size_num = float('inf')
+    if min_size != "":
+        min_size_num = int(min_size) * 1000
+    if max_size != "":
+        max_size_num = int(max_size) * 1000
     for id in keyword_results:
         query = "SELECT SIZE FROM IMAGE WHERE ID = {}; ".format(int(id))
         size = cursor.execute(query).fetchall()[0][0]
-        if min_size == "":
-            if size < max_size:
-                results.append(id)
-        elif max_size == "":
-            if size > min_size:
-                results.append(id)
-        else:
-            if min_size < size < max_size:
-                results.append(id)
+        if min_size_num < size < max_size_num:
+            results.append(id)
 
     conn.close()
     return results

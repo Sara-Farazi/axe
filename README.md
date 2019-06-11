@@ -1,6 +1,6 @@
 # Axe (means Image in Farsi)
 
-Axe is my project for the shopify internship challenege described here. Here is how I created the project: 
+Axe is my project for the Shopify internship challenge. Here is how I created the project: 
 
 ## Find dataset
 I found a useful image dataset on Kaggle. It's a collection of ~30K images from Flickr with descriptions of what's in each picture. 
