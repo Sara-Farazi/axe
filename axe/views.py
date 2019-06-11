@@ -63,7 +63,8 @@ def get_pagination_items(results_size, page):
     return {
         "page": page,
         "prev": prev_page,
-        "next": next_page
+        "next": next_page,
+        "total": pages
     }
 
 
@@ -72,7 +73,7 @@ def is_search_request(request):
 
 
 def validate_search(query, max_size, min_size):
-    if query == "" and min_size == "" and max_size == "":
+    if query == "":
         return False
 
     if min_size != "" and not min_size.isdecimal():
@@ -102,7 +103,7 @@ def index(request):
 
         if not validate_search(query, max_size, min_size):
             return render(request, 'index.html', {
-                'advanced_search_error': True
+                'search_error': True
             })
 
         results = [result.decode("utf-8") for result in get_query_results(query, min_size, max_size)]
@@ -126,9 +127,9 @@ def download(request):
         images = request.GET['images'].split(",")
         compressed_file_path = compress_images(images)
 
-        with open(compressed_file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/zip")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(compressed_file_path)
+        with open(compressed_file_path, 'rb') as zf:
+            response = HttpResponse(zf.read(), content_type="application/zip")
+            response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(compressed_file_path)
             return response
 
     except Exception as e:

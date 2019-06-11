@@ -1,3 +1,6 @@
+# This script creates a Keywords table and for each image adds rows of (image_id, token) into the table.
+# This data is used to create the postings list for each term in query time.
+
 import re
 import sqlite3
 

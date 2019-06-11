@@ -1,3 +1,6 @@
+# This script creates an Image table in sqlite and populates it with the data about the images (name, tokens, size,...).
+# Tokens for each image is the union of all the terms in the image description and comments.
+
 import csv
 import os
 import sqlite3
