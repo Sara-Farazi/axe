@@ -10,7 +10,7 @@ COMPRESSED_IMAGES_DIR = "compressed"
 SOURCE_DIR = "{}/{}".format(DATA_DIR, ORIGINAL_IMAGES_DIR)
 DEST_DIR = "{}/{}".format(DATA_DIR, COMPRESSED_IMAGES_DIR)
 
-# Factors less than 65 may distort the image.
+# factors less than 65 may distort the image.
 QUALITY_FACTOR = 65
 
 

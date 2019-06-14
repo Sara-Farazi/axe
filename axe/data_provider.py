@@ -81,7 +81,7 @@ def get_query_results(query, min_size, max_size):
     keywords_results = get_keyword_results(keywords)
     final_results = filter_by_size(min_size, max_size, keywords_results)
 
-    # Add the results for the query to cache
+    # add the results for the query to cache
     for item in final_results:
         redis_client.lpush(query_key, item)
     return final_results

@@ -1,6 +1,5 @@
 # Axe (means Image in Farsi)
-
-Axe is my project for the Shopify internship challenge. Here is how I created the project: 
+AXE is an image repository application where you can search for images by a text query. It will return all images related to the given query. Here is how I created the project: 
 
 ## Find dataset
 I found a useful image dataset on Kaggle. It's a collection of ~30K images from Flickr with descriptions of what's in each picture. 
@@ -15,7 +14,7 @@ I wrote a few scripts and extracted / cleaned the data for my project's purposes
 3. `populate_posting_list_db.py`: This creates a table called `posting_list` which maps terms to images they're found in. I use this later to respond to queries efficiently!
 
 ## Define and implement the project
-According to the project descriptions provided by Shopify, I decided I was going to work on implementing a "search" function. The search function includes the following: 
+I decided I was going to work on implementing a "search" function. The search function includes the following: 
 
 The project is a web based application implemented using django. It provides a few simple pages: 1) a home page where users can input their search terms and criteria, 2) a results page where users interact with search results, 3) a queries page that shows a quick history of query processing times. 
 
